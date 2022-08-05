@@ -1,7 +1,7 @@
 {
   "name": "sync-branch",
-  "version": "1.0.0",
-  "description": "## Descri√ß√£o Essa a√ß√£o sincroniza a branch derivada da branch principal que for passada por par√¢metro.",
+  "version": "0.1.0",
+  "description": "## DescriÁ„o Essa aÁ„o sincroniza a branch derivada da branch principal que for passada por par‚metro.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
