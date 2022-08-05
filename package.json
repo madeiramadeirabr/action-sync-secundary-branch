@@ -1,0 +1,25 @@
+{
+  "name": "sync-branch",
+  "version": "1.0.0",
+  "description": "## Descrição Essa ação sincroniza a branch derivada da branch principal que for passada por parâmetro.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madeiramadeirabr/action-sync-secundary-branch.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/madeiramadeirabr/action-sync-secundary-branch/issues"
+  },
+  "homepage": "https://github.com/madeiramadeirabr/action-sync-secundary-branch#readme",
+  "dependencies": {
+    "@actions/core": "^1.9.0",
+    "@actions/github": "^5.0.3",
+    "@octokit/core": "^4.0.4"
+  }
+}
