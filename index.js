@@ -7,51 +7,51 @@ const octokit = new Octokit({ auth: githubToken})
 const branch_secundary =  core.getInput('branch-secundary')
 
 async function run (){
-    if(githubToken){
-        let branch_event = github.context.payload.ref.split('/')[2]
-        if(branch_event == github.context.payload.repository.default_branch){
-            try{
-
-                if(branch_secundary == ''){
-                    throw new Error('É necessário passar a branch secundária por parâmetro!')
-                }
-                
-                let {id} = github.context.payload.commits[0]
-                
-                let {number} = await getNumberPullRequestByCommit(id)
-                
-                if(number == null){
-                    throw new Error('Error não foi encontrar Pull Request mergeada!')
-                }
-
-                let getPullRequestBranchHeadResponse = await getPullRequestBranchHead(number)
-                
-                if(getPullRequestBranchHeadResponse.status != 200){
-                    throw new Error('Erro ao encontrar Pull Request!')
-                }
-                
-                let createPullRequestResponse = await createPullRequest(getPullRequestBranchHeadResponse.data.head.ref, branch_secundary)
-                console.log('teste response ',createPullRequestResponse.status )
-                if(createPullRequestResponse.status != 201){
-                    throw new Error( 'Error ao criar Pull Request!')
-                }
-
-                let mergeBranchSecundaryResponse = await mergeBranchSecundary(createPullRequestResponse.data.number)
-
-                if(mergeBranchSecundaryResponse.status != 200){
-                    throw new Error('Error ao realizar merge!')
-                }
-                core.setOutput("success", `branch ${branch_secundary} atualizada`)
-                console.log(`branch ${branch_secundary} atualizada!`)
-            }catch(error){
-                core.setFailed(error)
-            }
-        }else{
-            core.setFailed('Esta action só será executada quando a branch for mesclada com a branch padrão!')
-        }
-    }else{
+    if(!githubToken){
         core.setFailed('O token do Github é obrigatório!')
-    }    
+    }
+
+    let branch_event = github.context.payload.ref.split('/')[2]
+    if(branch_event != github.context.payload.repository.default_branch){
+        core.setFailed('Esta action só será executada quando a branch for mesclada com a branch padrão!')
+    }
+
+    try{
+
+        if(branch_secundary == ''){
+            throw new Error('É necessário passar a branch secundária por parâmetro!')
+        }
+        
+        let {id} = github.context.payload.commits[0]
+        
+        let {number} = await getNumberPullRequestByCommit(id)
+        
+        if(number == null){
+            throw new Error('Error não foi encontrar Pull Request mergeada!')
+        }
+
+        let getPullRequestBranchHeadResponse = await getPullRequestBranchHead(number)
+        
+        if(getPullRequestBranchHeadResponse.status != 200){
+            throw new Error('Erro ao encontrar Pull Request!')
+        }
+        
+        let createPullRequestResponse = await createPullRequest(getPullRequestBranchHeadResponse.data.head.ref, branch_secundary)
+        if(createPullRequestResponse.status != 201){
+            throw new Error( 'Error ao criar Pull Request!')
+        }
+
+        let mergeBranchSecundaryResponse = await mergeBranchSecundary(createPullRequestResponse.data.number)
+
+        if(mergeBranchSecundaryResponse.status != 200){
+            throw new Error('Error ao realizar merge!')
+        }
+        core.setOutput("success", `branch ${branch_secundary} atualizada`)
+        console.log(`branch ${branch_secundary} atualizada!`)
+    }catch(error){
+        core.setFailed(error)
+    }
+        
 }
 
 async function getNumberPullRequestByCommit(commitSha){
@@ -78,7 +78,7 @@ async function getPullRequestBranchHead(number){
 }
 
 async function createPullRequest(head, branch_secundary){
-    console.log(head, branch_secundary)
+    
    return  octokit.request('POST /repos/{owner}/{repo}/pulls', {
         owner: github.context.payload.repository.owner.name,
         repo: github.context.payload.repository.name,
