@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: action-sync-secundary-branch
+  annotations:
+    github.com/project-slug: madeiramadeirabr/action-sync-secundary-branch
+  tags:
+    - javascript
+spec:
+  type: service
+  lifecycle: production
+  owner: team-platform-engineering-admin
+  
