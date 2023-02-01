@@ -4,6 +4,7 @@ metadata:
   name: action-sync-secundary-branch
   annotations:
     github.com/project-slug: madeiramadeirabr/action-sync-secundary-branch
+    backstage.io/techdocs-ref: dir:.
   tags:
     - javascript
 spec:
